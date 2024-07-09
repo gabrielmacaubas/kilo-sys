@@ -3,14 +3,15 @@ package modelo;
 public class Pesagem extends Consumo {
     private double peso;
 
-    public Pesagem(String nome, double preco, double peso) {
-        super(nome, preco);
+    public Pesagem(int id , String nome, double preco, double peso) {
+        super(id ,nome, preco);
         this.peso = peso;
     }
 
     public Pesagem() {}
 
-    public double getPeso() {
+
+	public double getPeso() {
         return peso;
     }
 

@@ -5,7 +5,7 @@ import java.util.List;
 import com.db4o.query.Query;
 
 import modelo.Consumo;
-import modelo.Aluguel;
+
 
 
 public class DAOConsumo extends DAO<Consumo> {
@@ -22,9 +22,18 @@ public class DAOConsumo extends DAO<Consumo> {
             return null;
     }
     
-	public void create(Aluguel obj){
+	public void create(Consumo obj){
 		int novoid = super.gerarId();
 		obj.setId(novoid);
 		manager.store( obj );
 	}
+	
+	public List<Consumo> buscarTodos(){
+        Query q = manager.query();
+        q.constrain(Consumo.class);
+        return q.execute();
+    }
+	
 }
+
+

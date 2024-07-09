@@ -7,15 +7,17 @@
 
 package daodb4o;
 
+
 import com.db4o.Db4oEmbedded;
 import com.db4o.ObjectContainer;
 import com.db4o.config.EmbeddedConfiguration;
 import com.db4o.cs.Db4oClientServer;
 import com.db4o.cs.config.ClientConfiguration;
 
-import modelo.Aluguel;
-import modelo.Carro;
-import modelo.Cliente;
+import modelo.Bebida;
+
+import modelo.Consumo;
+import modelo.Refeicao;
 
 public class Util {
 	private static ObjectContainer manager=null;
@@ -31,19 +33,18 @@ public class Util {
 		EmbeddedConfiguration config =  Db4oEmbedded.newConfiguration(); 
 		config.common().messageLevel(0);  // mensagens na tela 0(desliga),1,2,3...
 		
-		// habilitar cascata na alteração, remoção e leitura
-		config.common().objectClass(Carro.class).cascadeOnDelete(false);;
-		config.common().objectClass(Carro.class).cascadeOnUpdate(true);;
-		config.common().objectClass(Carro.class).cascadeOnActivate(true);
-		config.common().objectClass(Cliente.class).cascadeOnDelete(false);;
-		config.common().objectClass(Cliente.class).cascadeOnUpdate(true);;
-		config.common().objectClass(Cliente.class).cascadeOnActivate(true);
-		config.common().objectClass(Aluguel.class).cascadeOnDelete(false);;
-		config.common().objectClass(Aluguel.class).cascadeOnUpdate(true);;
-		config.common().objectClass(Aluguel.class).cascadeOnActivate(true);
-		// indexacao de atributos
-		config.common().objectClass(Carro.class).objectField("placa").indexed(true);
-		config.common().objectClass(Cliente.class).objectField("nome").indexed(true);
+		// habilitar cascata na alteraï¿½ï¿½o, remoï¿½ï¿½o e leitura
+		config.common().objectClass(Consumo.class).cascadeOnDelete(false);;
+		config.common().objectClass(Consumo.class).cascadeOnUpdate(true);;
+		config.common().objectClass(Consumo.class).cascadeOnActivate(true);
+		config.common().objectClass(Bebida.class).cascadeOnDelete(false);;
+		config.common().objectClass(Bebida.class).cascadeOnUpdate(true);;
+		config.common().objectClass(Bebida.class).cascadeOnActivate(true);
+		config.common().objectClass(Refeicao.class).cascadeOnDelete(false);;
+		config.common().objectClass(Refeicao.class).cascadeOnUpdate(true);;
+		config.common().objectClass(Refeicao.class).cascadeOnActivate(true);
+	//	config.common().objectClass(Carro.class).objectField("placa").indexed(true);
+	//	config.common().objectClass(Cliente.class).objectField("nome").indexed(true);
 
 		//conexao local
 		manager = Db4oEmbedded.openFile(config, "banco.db4o");
@@ -61,21 +62,21 @@ public class Util {
 		ClientConfiguration config = Db4oClientServer.newClientConfiguration( ) ;
 		config.common().messageLevel(0);  // 0,1,2,3...
 
-		// habilitar cascata na alteração, remoção e leitura
-		config.common().objectClass(Carro.class).cascadeOnDelete(false);;
-		config.common().objectClass(Carro.class).cascadeOnUpdate(true);;
-		config.common().objectClass(Carro.class).cascadeOnActivate(true);
-		config.common().objectClass(Cliente.class).cascadeOnDelete(false);;
-		config.common().objectClass(Cliente.class).cascadeOnUpdate(true);;
-		config.common().objectClass(Cliente.class).cascadeOnActivate(true);
-		config.common().objectClass(Aluguel.class).cascadeOnDelete(false);;
-		config.common().objectClass(Aluguel.class).cascadeOnUpdate(true);;
-		config.common().objectClass(Aluguel.class).cascadeOnActivate(true);
+		// habilitar cascata na alteraï¿½ï¿½o, remoï¿½ï¿½o e leitura
+		config.common().objectClass(Consumo.class).cascadeOnDelete(false);;
+		config.common().objectClass(Consumo.class).cascadeOnUpdate(true);;
+		config.common().objectClass(Consumo.class).cascadeOnActivate(true);
+		config.common().objectClass(Bebida.class).cascadeOnDelete(false);;
+		config.common().objectClass(Bebida.class).cascadeOnUpdate(true);;
+		config.common().objectClass(Bebida.class).cascadeOnActivate(true);
+		config.common().objectClass(Refeicao.class).cascadeOnDelete(false);;
+		config.common().objectClass(Refeicao.class).cascadeOnUpdate(true);;
+		config.common().objectClass(Refeicao.class).cascadeOnActivate(true);
 		// indexacao de atributos
-		config.common().objectClass(Carro.class).objectField("placa").indexed(true);
-		config.common().objectClass(Cliente.class).objectField("nome").indexed(true);
+	//	config.common().objectClass(Carro.class).objectField("placa").indexed(true);
+	//	config.common().objectClass(Cliente.class).objectField("nome").indexed(true);
 
-		//Conexão remota 
+		//Conexï¿½o remota 
 		//****************
 		String ipservidor="";
 		//ipservidor = "10.0.4.189";		// computador do professor (lab3)

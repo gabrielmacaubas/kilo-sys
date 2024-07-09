@@ -5,7 +5,8 @@ public abstract class Consumo {
     private String nome;
     private double preco;
 
-    public Consumo(String nome, double preco) {
+    public Consumo(int id , String nome, double preco) {
+    	this.id = id;
         this.nome = nome;
         this.preco = preco;
     }
