@@ -7,7 +7,6 @@ import com.db4o.query.Query;
 import modelo.Consumo;
 
 
-
 public class DAOConsumo extends DAO<Consumo> {
 
     public Consumo read(Object chave) {

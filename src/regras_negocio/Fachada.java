@@ -62,11 +62,17 @@ public class Fachada {
         return consumo;
     }
 
-    public static void adicionarConsumoNaRefeicao(int idRefeicao, Consumo consumo) throws Exception {
+    public static void adicionarConsumoNaRefeicao(int idRefeicao, int idConsumo) throws Exception {
         DAO.begin();
+        
         Refeicao refeicao = daorefeicao.read(idRefeicao);
         if (refeicao == null)
             throw new Exception("Refeição não encontrada: " + idRefeicao);
+        
+        Consumo consumo = daoconsumo.read(idConsumo);
+        if (consumo == null)
+            throw new Exception("Consumo não encontrada: " + idConsumo);
+        
         refeicao.addConsumo(consumo);
         daorefeicao.update(refeicao);
         DAO.commit();
@@ -175,44 +181,20 @@ public class Fachada {
 
     // Consultas adicionais
     public static List<Refeicao> listarRefeicoesPorData(String data) {
-        List<Refeicao> todasRefeicoes = daorefeicao.readAll();
-        List<Refeicao> resultado = new ArrayList<>();
-        for (Refeicao refeicao : todasRefeicoes) {
-            if (refeicao.getData().equals(data)) {
-                resultado.add(refeicao);
-            }
-        }
-        return resultado;
+        List<Refeicao> todasRefeicoes = daorefeicao.refeicoesPorData(data);
+
+        return todasRefeicoes;
     }
 
     public static List<Refeicao> listarRefeicoesComPesagemMaiorQue(double peso) {
-        List<Refeicao> todasRefeicoes = daorefeicao.readAll();
-        List<Refeicao> resultado = new ArrayList<>();
-        for (Refeicao refeicao : todasRefeicoes) {
-            for (Consumo consumo : refeicao.getConsumos()) {
-                if (consumo instanceof Pesagem && ((Pesagem) consumo).getPeso() > peso) {
-                    resultado.add(refeicao);
-                    break;
-                }
-            }
-        }
-        return resultado;
+        List<Refeicao> todasRefeicoes = daorefeicao.refeicoesAcimaDeNKg((int)peso);
+        
+        return todasRefeicoes;
     }
     
     public static List<Refeicao> listarRefeicoesComMaisDeNBebidas(int n) {
-        List<Refeicao> todasRefeicoes = daorefeicao.readAll();
-        List<Refeicao> resultado = new ArrayList<>();
-        for (Refeicao refeicao : todasRefeicoes) {
-            int contadorBebidas = 0;
-            for (Consumo consumo : refeicao.getConsumos()) {
-                if (consumo instanceof Bebida) {
-                    contadorBebidas++;
-                }
-            }
-            if (contadorBebidas > n) {
-                resultado.add(refeicao);
-            }
-        }
-        return resultado;
+        List<Refeicao> todasRefeicoes = daorefeicao.refeicoesMaisNBebidas(1);
+
+        return todasRefeicoes;
     }
 }

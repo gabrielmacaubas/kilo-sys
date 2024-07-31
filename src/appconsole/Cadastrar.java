@@ -1,10 +1,3 @@
-/**********************************
- * IFPB - Curso Superior de Tec. em Sist. para Internet
- * POB - Persistencia de Objetos
- * Prof. Fausto Ayres
- *
- */
-
 package appconsole;
 
 import regras_negocio.Fachada;
@@ -14,32 +7,42 @@ public class Cadastrar {
 	public Cadastrar() {
 		try {
 			Fachada.inicializar();
-			System.out.println("cadastrando carro...");
-			Fachada.cadastrarCarro("AAA1000", "palio");
-			Fachada.cadastrarCarro("BBB2000", "onix");
-			Fachada.cadastrarCarro("CCC3000", "civic");
+			
+			System.out.println("cadastrando pesagens...");
+			Fachada.cadastrarPesagem(1, "Carne", 15.0, 0.250);
+			Fachada.cadastrarPesagem(2, "Frango", 10.0, 1.200);
+			Fachada.cadastrarPesagem(3, "Salmão", 50.0, 0.300);
+			Fachada.cadastrarPesagem(4, "Salada", 8.0, 0.150);
+			
+			System.out.println("cadastrando bebidas...");
+			Fachada.cadastrarBebida(5, "Refrigerante", 5.0, 0.350);
+	        Fachada.cadastrarBebida(6, "Suco", 7.0, 0.300);
+	        Fachada.cadastrarBebida(7, "Água", 3.0, 0.500);
+	        Fachada.cadastrarBebida(8, "Cerveja", 10.0, 0.355);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
 
 		try {
-			System.out.println("cadastrando cliente...");
-			Fachada.cadastrarCliente("joao", "1111");
-			Fachada.cadastrarCliente("maria", "2222");
-			Fachada.cadastrarCliente("jose", "3333");
+	        Fachada.cadastrarRefeicao(1, "10/05/2024");
+	        Fachada.cadastrarRefeicao(2, "10/05/2024");
+	        Fachada.cadastrarRefeicao(3, "12/05/2024");
+	        Fachada.cadastrarRefeicao(4, "13/05/2024");
+			
+	        System.out.println("Adicionando consumos nas refeições...");
+	        Fachada.adicionarConsumoNaRefeicao(1, 1);
+	        Fachada.adicionarConsumoNaRefeicao(2, 5);
+	        Fachada.adicionarConsumoNaRefeicao(3, 2);
+	        Fachada.adicionarConsumoNaRefeicao(3, 6);
+	        Fachada.adicionarConsumoNaRefeicao(4, 3);
+	        Fachada.adicionarConsumoNaRefeicao(4, 4);
+	        Fachada.adicionarConsumoNaRefeicao(4, 7);
+	        Fachada.adicionarConsumoNaRefeicao(4, 8);
+
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
 		
-		try {
-			System.out.println("alugando carro...");
-			Fachada.alugarCarro("1111","AAA1000",100.0 , "01/05/2022", "10/05/2022");
-			Fachada.alugarCarro("2222","BBB2000",200.0 , "01/05/2022", "10/05/2022");
-			Fachada.alugarCarro("2222","CCC3000",300.0 , "01/05/2022", "10/05/2022");
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
-
 		Fachada.finalizar();
 		System.out.println("\nfim do programa !");
 	}

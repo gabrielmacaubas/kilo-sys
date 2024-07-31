@@ -6,6 +6,7 @@ import com.db4o.query.Query;
 
 import modelo.Pesagem;
 
+
 public class DAOPesagem extends DAO<Pesagem> {
 
     public Pesagem read(Object chave) {

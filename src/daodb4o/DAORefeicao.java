@@ -1,6 +1,5 @@
 package daodb4o;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.db4o.query.Candidate;
@@ -11,6 +10,7 @@ import modelo.Consumo;
 import modelo.Refeicao;
 import modelo.Pesagem;
 import modelo.Bebida;
+
 
 public class DAORefeicao extends DAO<Refeicao> {
 
@@ -40,36 +40,40 @@ public class DAORefeicao extends DAO<Refeicao> {
     }
 
     public List<Refeicao> refeicoesAcimaDeNKg(int n) {
-        Query q = manager.query();
-        q.constrain(Refeicao.class);
-        q.descend("consumos").constrain(new Evaluation() {
-        	@Override
-            public void evaluate(Candidate candidate) {
-                Consumo consumo = (Consumo) candidate.getObject();
-                if (consumo instanceof Pesagem) {
-                    Pesagem pesagem = (Pesagem) consumo;
-                    if (pesagem.getPeso() > n) {
-                        candidate.include(true);
-                    }
-                } else {
-                    candidate.include(false);
-                }
-            }
-        });
-
-        return q.execute();
+		Query q = manager.query();
+		q.constrain(Refeicao.class);
+		q.constrain(new Evaluation() {
+			@Override
+	        public void evaluate(Candidate candidate) {
+	            Refeicao refeicao = (Refeicao) candidate.getObject();
+	            double somaPesos = 0;
+	            for (Consumo consumo : refeicao.getConsumos()) {
+	                if (consumo instanceof Pesagem) {
+	                    Pesagem pesagem = (Pesagem) consumo;
+	                    somaPesos += pesagem.getPeso();
+	                }
+	            }
+	            if (somaPesos > n) {
+	                candidate.include(true);
+	            } else {
+	                candidate.include(false);
+	            }
+			}
+	    });
+	
+	    return q.execute();
     }
     
     public List<Refeicao> refeicoesMaisNBebidas(int N) {
         Query q = manager.query();
         q.constrain(Refeicao.class);
-        q.descend("consumos").constrain(new Evaluation() {
+        q.constrain(new Evaluation() {
             @Override
             public void evaluate(Candidate candidate) {
-                List<Consumo> consumos = (List<Consumo>) candidate.getObject();
+            	Refeicao refeicao = (Refeicao) candidate.getObject();
                 int bebidaCount = 0;
 
-                for (Consumo consumo : consumos) {
+                for (Consumo consumo : refeicao.getConsumos()) {
                     if (consumo instanceof Bebida) {
                         bebidaCount++;
                     }

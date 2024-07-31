@@ -1,4 +1,3 @@
-
 package modelo;
 
 import java.util.ArrayList;
@@ -42,12 +41,12 @@ public class Refeicao {
     }
 
     public void addConsumo(Consumo consumo) {
-        consumos.add(consumo);
+        this.consumos.add(consumo);
         calcularValorPago();
     }
 
     public void removeConsumo(Consumo consumo) {
-        consumos.remove(consumo);
+    	this.consumos.remove(consumo);
         calcularValorPago();
     }
 
@@ -56,5 +55,14 @@ public class Refeicao {
         for (Consumo consumo : consumos) {
             valorPago += consumo.getPreco();
         }
+    }
+    
+    @Override
+    public String toString() {
+        StringBuilder consumos = new StringBuilder();
+        for (Consumo consumo : this.consumos) {
+            consumos.append(consumo.toString()).append(", ");
+        }
+        return "id=" + this.id + ", data=" + this.data + ", valorPago=" + this.valorPago + ", consumos=[" + consumos.toString() + "]";
     }
 }
