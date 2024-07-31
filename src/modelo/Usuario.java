@@ -1,7 +1,7 @@
 package modelo;
 
 public class Usuario {
-	private int id;		//autogerado no daousuario
+	private int id;
 	private String nome;
 	private String senha;
 	

@@ -1,9 +1,3 @@
-/**********************************
- * IFPB - Curso Superior de Tec. em Sist. para Internet
- * Persistencia de Objetos
- * Prof. Fausto Maranhão Ayres
- **********************************/
-
 package daodb4o;
 
 import java.lang.reflect.Field;
@@ -18,8 +12,7 @@ public abstract class DAO<T> implements DAOInterface<T> {
 	protected static ObjectContainer manager;
 
 	public static void open(){	
-		manager = Util.conectarBanco();				//banco local
-		//manager = Util.conectarBancoRemoto();		//banco remoto
+		manager = Util.conectarBanco();
 	}
 
 	public static void close(){
@@ -29,10 +22,10 @@ public abstract class DAO<T> implements DAOInterface<T> {
 	//----------CRUD-----------------------
 
 	public void create(T obj){
-		manager.store( obj );
+		this.manager.store( obj );
 	}
 
-	public abstract T read(Object chave);	//sobrescrito nas subclasses
+	public abstract T read(Object chave);
 
 	public T update(T obj){
 		manager.store(obj);
@@ -45,7 +38,7 @@ public abstract class DAO<T> implements DAOInterface<T> {
 
 	@SuppressWarnings("unchecked")
 	public List<T> readAll(){
-		manager.ext().purge();  	//limpar cache do manager
+		manager.ext().purge(); 
 
 		Class<T> type = (Class<T>) ((ParameterizedType) this.getClass()
 				.getGenericSuperclass()).getActualTypeArguments()[0];
@@ -55,7 +48,6 @@ public abstract class DAO<T> implements DAOInterface<T> {
 	}
 
 	@SuppressWarnings("unchecked")
-	//deletar todos objetos de um tipo (e subtipo)
 	public void deleteAll(){
 		Class<T> type = (Class<T>) ((ParameterizedType) this.getClass()
 				.getGenericSuperclass()).getActualTypeArguments()[0];
@@ -67,9 +59,8 @@ public abstract class DAO<T> implements DAOInterface<T> {
 		}
 	}
 
-	//--------transação---------------
 	public static void begin(){	
-	}		// tem que ser vazio
+	}
 
 	public static void commit(){
 		manager.commit();
@@ -78,34 +69,27 @@ public abstract class DAO<T> implements DAOInterface<T> {
 		manager.rollback();
 	}
 
-	//	gerar novo id para uma classe T
-	//  consulta o maior valor armazenado no atributo "id" 
-
 	public int gerarId() {
 		@SuppressWarnings("unchecked")
 		Class<T> type =(Class<T>) ((ParameterizedType) this.getClass()
 				.getGenericSuperclass()).getActualTypeArguments()[0];
-
-		//verificar se o banco esta vazio 
+ 
 		if(manager.query(type).size()==0) {
-			return 1;			//primeiro id gerado
+			return 1;
 		}
 		else {
-			//obter o maior valor de id para o tipo
 			Query q = manager.query();
 			q.constrain(type);
 			q.descend("id").orderDescending();
 			List<T> resultados =  q.execute();
 			if(resultados.isEmpty()) 
-				return 1; 		//nenhum resultado, retorna primeiro id 
+				return 1;
 			else 
 				try {
-					//obter objeto localizado
 					T objeto =  resultados.get(0);
 					Field atributo = type.getDeclaredField("id") ;
 					atributo.setAccessible(true);
-					//obter atributo id do objeto localizado e incrementa-lo
-					int maxid = (Integer) atributo.get(objeto);  //valor do id
+					int maxid = (Integer) atributo.get(objeto);
 					return maxid+1;
 
 				} catch(NoSuchFieldException e) {
