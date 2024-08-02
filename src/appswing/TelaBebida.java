@@ -24,9 +24,6 @@ public class TelaBebida {
     private JTable table;
     private DefaultTableModel tableModel;
 
-    /**
-     * Launch the application.
-     */
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -40,18 +37,12 @@ public class TelaBebida {
         });
     }
 
-    /**
-     * Create the application.
-     */
     public TelaBebida() {
         initialize();
         Fachada.inicializar();
         listarBebidas();
     }
 
-    /**
-     * Initialize the contents of the frame.
-     */
     private void initialize() {
         frame = new JFrame();
         frame.setTitle("Bebida");

@@ -28,8 +28,6 @@ public class Util {
 		config.common().objectClass(Refeicao.class).cascadeOnDelete(false);;
 		config.common().objectClass(Refeicao.class).cascadeOnUpdate(true);;
 		config.common().objectClass(Refeicao.class).cascadeOnActivate(true);
-		//	config.common().objectClass(Carro.class).objectField("placa").indexed(true);
-		//	config.common().objectClass(Cliente.class).objectField("nome").indexed(true);
 
 		manager = Db4oEmbedded.openFile(config, "banco.db4o");
 		return manager;

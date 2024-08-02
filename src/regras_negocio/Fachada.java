@@ -28,7 +28,6 @@ public class Fachada {
         DAO.close();
     }
 
-    // Métodos para Refeição
     public static Refeicao cadastrarRefeicao(int id, String data) throws Exception {
         DAO.begin();
         Refeicao refeicao = daorefeicao.read(id);

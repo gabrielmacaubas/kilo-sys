@@ -15,18 +15,16 @@ import modelo.Refeicao;
 import modelo.Consumo;
 import regras_negocio.Fachada;
 
+
 public class TelaRefeicao {
 
     JFrame frame;
     private JTextField txtId;
     private JTextField txtData;
-    private JTextField txtIdConsumo;  // Novo campo para ID do Consumo
+    private JTextField txtIdConsumo;
     private JTable table;
     private DefaultTableModel tableModel;
 
-    /**
-     * Launch the application.
-     */
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -40,18 +38,12 @@ public class TelaRefeicao {
         });
     }
 
-    /**
-     * Create the application.
-     */
     public TelaRefeicao() {
         initialize();
         Fachada.inicializar();
         listarRefeicoes();
     }
 
-    /**
-     * Initialize the contents of the frame.
-     */
     private void initialize() {
         setFrame(new JFrame());
         getFrame().setBounds(100, 100, 600, 400);

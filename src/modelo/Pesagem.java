@@ -9,8 +9,6 @@ public class Pesagem extends Consumo {
         this.peso = peso;
     }
 
-  
-
 	public double getPeso() {
         return peso;
     }

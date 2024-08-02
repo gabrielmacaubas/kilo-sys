@@ -24,9 +24,6 @@ public class TelaPesagem {
     private JTable table;
     private DefaultTableModel tableModel;
 
-    /**
-     * Launch the application.
-     */
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -40,18 +37,12 @@ public class TelaPesagem {
         });
     }
 
-    /**
-     * Create the application.
-     */
     public TelaPesagem() {
         initialize();
         Fachada.inicializar();
         listarPesagens();
     }
 
-    /**
-     * Initialize the contents of the frame.
-     */
     private void initialize() {
         frame = new JFrame();
         frame.setBounds(100, 100, 600, 400);

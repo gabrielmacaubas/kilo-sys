@@ -1,11 +1,5 @@
 package appswing;
 
-/**********************************
- * IFPB - Curso Superior de Tec. em Sist. para Internet
- * POO
- * Prof. Fausto Maranhão Ayres
- **********************************/
-
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
@@ -20,6 +14,7 @@ import java.awt.EventQueue;
 
 import regras_negocio.Fachada;
 
+
 public class TelaPrincipal {
     private JFrame frame;
     private JMenu mnBebida;
@@ -28,9 +23,6 @@ public class TelaPrincipal {
     private JMenu mnConsulta;
     private JLabel label;
 
-    /**
-     * Launch the application.
-     */
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -44,17 +36,11 @@ public class TelaPrincipal {
         });
     }
 
-    /**
-     * Create the application.
-     */
     public TelaPrincipal() {
         initialize();
         frame.setVisible(true);
     }
 
-    /**
-     * Initialize the contents of the frame.
-     */
     private void initialize() {
         frame = new JFrame();
         frame.setTitle("Restaurante-a-Kilo");
@@ -65,7 +51,7 @@ public class TelaPrincipal {
         label = new JLabel("");
         label.setFont(new Font("Tahoma", Font.PLAIN, 26));
         label.setHorizontalAlignment(SwingConstants.CENTER);
-        label.setText("Inicializando...");
+        label.setText("Restaurante a Kilo");
         label.setBounds(0, 0, 467, 302);
         ImageIcon imagem = new ImageIcon(getClass().getResource(""));
         imagem = new ImageIcon(imagem.getImage().getScaledInstance(label.getWidth(), label.getHeight(), Image.SCALE_DEFAULT));

@@ -19,8 +19,6 @@ public abstract class DAO<T> implements DAOInterface<T> {
 		Util.desconectar();
 	}
 
-	//----------CRUD-----------------------
-
 	public void create(T obj){
 		this.manager.store( obj );
 	}
