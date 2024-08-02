@@ -5,11 +5,11 @@ public class Pesagem extends Consumo {
 
     public Pesagem(int id , String nome, double preco, double peso) {
         super(id ,nome, preco);
+        
         this.peso = peso;
     }
 
-    public Pesagem() {}
-
+  
 
 	public double getPeso() {
         return peso;
@@ -20,7 +20,9 @@ public class Pesagem extends Consumo {
     }
 
     @Override
-    public String toString() {
-        return super.toString() + ", peso=" + peso;
-    }
+	public String toString() {
+		return "Pesagem [peso=" + peso + ", getId()=" + getId() + ", getNome()=" + getNome() + ", getPreco()="
+				+ getPreco() + ", toString()=" + super.toString() + ", getClass()=" + getClass() + ", hashCode()="
+				+ hashCode() + "]";
+	}
 }

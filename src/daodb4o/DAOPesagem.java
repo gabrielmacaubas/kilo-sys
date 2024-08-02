@@ -26,4 +26,16 @@ public class DAOPesagem extends DAO<Pesagem> {
 		obj.setId(novoid);
 		manager.store( obj );
 	}
+	public int gerarId() {
+	    Query q = manager.query();
+	    q.constrain(Pesagem.class);
+	    q.descend("id").orderDescending();
+	    List<Pesagem> resultados = q.execute();
+	    if (resultados.size() > 0) {
+	        return resultados.get(0).getId() + 1;
+	    } else {
+	        return 1;
+	    }
+	}
+
 }

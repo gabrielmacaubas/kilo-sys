@@ -1,215 +1,161 @@
-/**********************************
- * IFPB - Curso Superior de Tec. em Sist. para Internet
- * POB - Persistencia de Objetos
- * Prof. Fausto Ayres
- *
- */
 package appswing;
 
-import java.awt.Color;
-import java.awt.Font;
+import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.util.List;
-
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
-import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
-
-import modelo.Aluguel;
-import modelo.Carro;
+import java.util.List;
+import modelo.Refeicao;
 import regras_negocio.Fachada;
 
 public class TelaConsulta {
-	private JDialog frame;
-	private JTable table;
-	private JScrollPane scrollPane;
-	private JButton button;
-	private JLabel label;
-	private JLabel label_4;
 
-	private JComboBox<String> comboBox;
+    JFrame frame;
+    private JTextField txtData;
+    private JTextField txtPeso;
+    private JTextField txtBebidas;
+    private JTable table;
+    private DefaultTableModel tableModel;
 
-	/**
-	 * Launch the application.
-	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					new TelaConsulta();
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
+    /**
+     * Launch the application.
+     */
+    public static void main(String[] args) {
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    TelaConsulta window = new TelaConsulta();
+                    window.frame.setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 
-	/**
-	 * Create the application.
-	 */
-	public TelaConsulta() {
-		initialize();
-		frame.setVisible(true);
-	}
+    /**
+     * Create the application.
+     */
+    public TelaConsulta() {
+        initialize();
+        Fachada.inicializar();
+    }
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	private void initialize() {
-		frame = new JDialog();
-		frame.setModal(true);
+    /**
+     * Initialize the contents of the frame.
+     */
+    private void initialize() {
+        frame = new JFrame();
+        frame.setBounds(100, 100, 600, 400);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.getContentPane().setLayout(null);
 
-		frame.setResizable(false);
-		frame.setTitle("Consulta");
-		frame.setBounds(100, 100, 729, 385);
-		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
-		frame.addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowOpened(WindowEvent e) {
-				Fachada.inicializar();
-			}
-			@Override
-			public void windowClosing(WindowEvent e) {
-				Fachada.finalizar();
-			}
-		});
+        JLabel lblData = new JLabel("Data:");
+        lblData.setBounds(10, 10, 80, 25);
+        frame.getContentPane().add(lblData);
 
-		scrollPane = new JScrollPane();
-		scrollPane.setBounds(21, 43, 674, 148);
-		frame.getContentPane().add(scrollPane);
+        txtData = new JTextField();
+        txtData.setBounds(100, 10, 150, 25);
+        frame.getContentPane().add(txtData);
+        txtData.setColumns(10);
 
-		table = new JTable() {
-			public boolean isCellEditable(int rowIndex, int vColIndex) {
-				return false;
-			}
-		};
-		
-		table.setGridColor(Color.BLACK);
-		table.setRequestFocusEnabled(false);
-		table.setFocusable(false);
-		table.setBackground(Color.LIGHT_GRAY);
-		table.setFillsViewportHeight(true);
-		table.setRowSelectionAllowed(true);
-		table.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		scrollPane.setViewportView(table);
-		table.setBorder(new LineBorder(new Color(0, 0, 0)));
-		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		table.setShowGrid(true);
-		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        JButton btnConsultarPorData = new JButton("Consultar por Data");
+        btnConsultarPorData.setBounds(260, 10, 180, 25);
+        frame.getContentPane().add(btnConsultarPorData);
+        btnConsultarPorData.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                consultarPorData();
+            }
+        });
 
-		label = new JLabel("");		//label de mensagem
-		label.setForeground(Color.BLUE);
-		label.setBounds(21, 321, 688, 14);
-		frame.getContentPane().add(label);
+        JLabel lblPeso = new JLabel("Peso:");
+        lblPeso.setBounds(10, 50, 80, 25);
+        frame.getContentPane().add(lblPeso);
 
-		label_4 = new JLabel("resultados:");
-		label_4.setBounds(21, 190, 431, 14);
-		frame.getContentPane().add(label_4);
+        txtPeso = new JTextField();
+        txtPeso.setBounds(100, 50, 150, 25);
+        frame.getContentPane().add(txtPeso);
+        txtPeso.setColumns(10);
 
-		button = new JButton("Consultar");
-		button.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		button.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				int index = comboBox.getSelectedIndex();
-				if(index<0)
-					label_4.setText("consulta nao selecionada");
-				else {
-					label_4.setText("");
-					switch(index) {
-					case 0: 
-						List<Aluguel> resultado1 = Fachada.alugueisFinalizados();
-						listagemAluguel(resultado1);
-						break;
-					case 1: 
-						String modelo = JOptionPane.showInputDialog("digite o modelo");
-						List<Aluguel> resultado2 = Fachada.alugueisModelo(modelo);
-						listagemAluguel(resultado2);
-						break;
-					case 2: 
-						String n = JOptionPane.showInputDialog("digite N");
-						int numero = Integer.parseInt(n);
-						List<Carro> resultado3 = Fachada.carrosNAlugueis(numero);
-						listagemCarro(resultado3);
-						break;
+        JButton btnConsultarPorPeso = new JButton("Peso Maior que");
+        btnConsultarPorPeso.setBounds(260, 50, 180, 25);
+        frame.getContentPane().add(btnConsultarPorPeso);
+        btnConsultarPorPeso.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                consultarPorPeso();
+            }
+        });
 
-					}
-				}
+        JLabel lblBebidas = new JLabel("Qtd Bebidas:");
+        lblBebidas.setBounds(10, 90, 80, 25);
+        frame.getContentPane().add(lblBebidas);
 
-			}
-		});
-		button.setBounds(606, 10, 89, 23);
-		frame.getContentPane().add(button);
+        txtBebidas = new JTextField();
+        txtBebidas.setBounds(100, 90, 150, 25);
+        frame.getContentPane().add(txtBebidas);
+        txtBebidas.setColumns(10);
 
-		comboBox = new JComboBox<String>();
-		comboBox.setToolTipText("selecione a consulta");
-		comboBox.setModel(new DefaultComboBoxModel<>(new String[] {"alugueis finalizados", "alugueis de um determinado modelo de carro", "carros que possuem N alugueis"}));
-		comboBox.setBounds(21, 10, 513, 22);
-		frame.getContentPane().add(comboBox);
-	}
+        JButton btnConsultarPorBebidas = new JButton("Bebidas Maior que");
+        btnConsultarPorBebidas.setBounds(260, 90, 180, 25);
+        frame.getContentPane().add(btnConsultarPorBebidas);
+        btnConsultarPorBebidas.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                consultarPorBebidas();
+            }
+        });
 
-	public void listagemAluguel(List<Aluguel> lista) {
-		try{
-			// o model armazena todas as linhas e colunas do table
-			DefaultTableModel model = new DefaultTableModel();
+        JScrollPane scrollPane = new JScrollPane();
+        scrollPane.setBounds(10, 130, 560, 220);
+        frame.getContentPane().add(scrollPane);
 
-			//adicionar colunas no model
-			model.addColumn("id");
-			model.addColumn("nome");
-			model.addColumn("placa");
-			model.addColumn("data inicial");
-			model.addColumn("data final");
-			model.addColumn("total a pagar");
-			model.addColumn("finalizado");
+        tableModel = new DefaultTableModel(
+            new Object[][] {},
+            new String[] { "ID","Data","Valor Pago" }
+        );
+        table = new JTable(tableModel);
+        scrollPane.setViewportView(table);
+    }
 
-			//adicionar linhas no model
-			for(Aluguel aluguel : lista) {
-				model.addRow(new Object[]{aluguel.getId(), aluguel.getCliente().getNome(), aluguel.getCarro().getPlaca(), aluguel.getDatainicio(), aluguel.getDatafim(), aluguel.getValor(), aluguel.isFinalizado()});
-			}
-			//atualizar model no table (visualizacao)
-			table.setModel(model);
+    private void consultarPorData() {
+        try {
+            String data = txtData.getText();
+            List<Refeicao> refeicoes = Fachada.listarRefeicoesPorData(data);
+            atualizarTabela(refeicoes);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-			label_4.setText("resultados: "+lista.size()+ " objetos");
-		}
-		catch(Exception erro){
-			label.setText(erro.getMessage());
-		}
-	}
-	
-	public void listagemCarro(List<Carro> lista) {
-		try{
-			// model armazena todas as linhas e colunas do table
-			DefaultTableModel model = new DefaultTableModel();
+    private void consultarPorPeso() {
+        try {
+            double peso = Double.parseDouble(txtPeso.getText());
+            List<Refeicao> refeicoes = Fachada.listarRefeicoesComPesagemMaiorQue(peso);
+            atualizarTabela(refeicoes);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+    }
 
-			//adicionar colunas no model
-			model.addColumn("placa");
-			model.addColumn("modelo");
-			model.addColumn("alugado");
+    private void consultarPorBebidas() {
+        try {
+            int qtdBebidas = Integer.parseInt(txtBebidas.getText());
+            List<Refeicao> refeicoes = Fachada.listarRefeicoesComMaisDeNBebidas(qtdBebidas);
+            atualizarTabela(refeicoes);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+    }
 
-			//adicionar linhas no model
-			for(Carro car : lista) {
-				model.addRow(new Object[]{car.getPlaca(), car.getModelo(), car.isAlugado()} );
-			}
-			//atualizar model no table (visualizacao)
-			table.setModel(model);
-
-			label_4.setText("resultados: "+lista.size()+ " objetos");
-		}
-		catch(Exception erro){
-			label.setText(erro.getMessage());
-		}
-	}
-
+    private void atualizarTabela(List<Refeicao> refeicoes) {
+        tableModel.setRowCount(0); // Limpar a tabela
+        for (Refeicao r : refeicoes) {
+            tableModel.addRow(new Object[] { r.getId(), r.getData(), r.getValorPago()});
+        }
+    }
 }
