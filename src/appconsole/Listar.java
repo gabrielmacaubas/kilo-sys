@@ -1,12 +1,14 @@
 package appconsole;
 
 import modelo.Pesagem;
+import jakarta.persistence.EntityManager;
 import modelo.Bebida;
 import modelo.Refeicao;
 import modelo.Consumo;
 import regras_negocio.Fachada;
 
 public class Listar {
+	protected static EntityManager manager;
 
 	public Listar() {
 		try {

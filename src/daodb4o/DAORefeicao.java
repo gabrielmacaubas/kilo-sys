@@ -64,7 +64,7 @@ public class DAORefeicao extends DAO<Refeicao> {
 	    return q.execute();
     }
     
-    public List<Refeicao> refeicoesMaisNBebidas(int N) {
+    public List<Refeicao> refeicoesMaisNBebidas(int n) {
         Query q = manager.query();
         q.constrain(Refeicao.class);
         q.constrain(new Evaluation() {
@@ -79,7 +79,7 @@ public class DAORefeicao extends DAO<Refeicao> {
                     }
                 }
 
-                if (bebidaCount > N) {
+                if (bebidaCount > n) {
                     candidate.include(true);
                 } else {
                     candidate.include(false);

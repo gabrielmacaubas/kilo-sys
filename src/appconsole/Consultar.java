@@ -1,9 +1,11 @@
 package appconsole;
 
+import jakarta.persistence.EntityManager;
 import modelo.Refeicao;
 import regras_negocio.Fachada;
 
 public class Consultar {
+	protected static EntityManager manager;
 
 	public Consultar() {
 		try {

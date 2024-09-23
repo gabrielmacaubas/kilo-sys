@@ -2,10 +2,10 @@ package regras_negocio;
 
 import java.util.List;
 import java.util.ArrayList;
-import daodb4o.DAO;
-import daodb4o.DAOBebida;
+import daojpa.DAO;
+import daojpa.DAOBebida;
 import daodb4o.DAORefeicao;
-import daodb4o.DAOConsumo;
+import daojpa.DAOConsumo;
 import daodb4o.DAOPesagem;
 import modelo.Refeicao;
 import modelo.Consumo;
@@ -13,8 +13,6 @@ import modelo.Pesagem;
 import modelo.Bebida;
 
 public class Fachada {
-    private Fachada() {}
-
     private static DAORefeicao daorefeicao = new DAORefeicao();  
     private static DAOConsumo daoconsumo = new DAOConsumo(); 
     private static DAOPesagem daopesagem = new DAOPesagem(); 
@@ -28,34 +26,35 @@ public class Fachada {
         DAO.close();
     }
 
-    public static Refeicao cadastrarRefeicao(int id, String data) throws Exception {
+    public static Refeicao cadastrarRefeicao(String data) throws Exception {
         DAO.begin();
-        Refeicao refeicao = daorefeicao.read(id);
-        if (refeicao != null)
-            throw new Exception("Refeição já cadastrada: " + id);
-        refeicao = new Refeicao(id, data);
+        Refeicao refeicao = daorefeicao.read(data);
+        refeicao = new Refeicao(data);
         daorefeicao.create(refeicao);
         DAO.commit();
         return refeicao;
     }
 
-    public static Consumo cadastrarPesagem(int id, String nome, double preco, double peso) throws Exception {
+    public static Consumo cadastrarPesagem(String nome, double preco, double peso) throws Exception {
         DAO.begin();
-        Consumo consumo = daoconsumo.read(id);
-        if (consumo != null)
-            throw new Exception("Consumo já cadastrado: " + id);
-        consumo = new Pesagem(id, nome, preco, peso);
+        Consumo consumo = daoconsumo.read(nome);
+        if (consumo != null) {
+            throw new Exception("Consumo já cadastrado: " + nome);
+        }
+        consumo = new Pesagem(nome, preco, peso);
         daoconsumo.create(consumo);
         DAO.commit();
         return consumo;
     }
 
-    public static Consumo cadastrarBebida(int id, String nome, double preco, double volume) throws Exception {
+    public static Consumo cadastrarBebida(String nome, double preco, double volume) throws Exception {
         DAO.begin();
-        Consumo consumo = daoconsumo.read(id);
-        if (consumo != null)
-            throw new Exception("Consumo já cadastrado: " + id);
-        consumo = new Bebida(id, nome, preco, volume);
+        Consumo consumo = daoconsumo.read(nome);
+        if (consumo != null) {
+			DAO.rollback();
+			throw new Exception("bebida ja existe");
+        }
+        consumo = new Bebida(nome, preco, volume);
         daoconsumo.create(consumo);
         DAO.commit();
         return consumo;
@@ -65,12 +64,16 @@ public class Fachada {
         DAO.begin();
         
         Refeicao refeicao = daorefeicao.read(idRefeicao);
-        if (refeicao == null)
+        if (refeicao == null) {
+        	DAO.rollback();
             throw new Exception("Refeição não encontrada: " + idRefeicao);
+        }
         
         Consumo consumo = daoconsumo.read(idConsumo);
-        if (consumo == null)
+        if (consumo == null) {
+        	DAO.rollback();
             throw new Exception("Consumo não encontrada: " + idConsumo);
+        }
         
         refeicao.addConsumo(consumo);
         daorefeicao.update(refeicao);
@@ -80,8 +83,11 @@ public class Fachada {
     public static void alterarRefeicao(int id, String data) throws Exception{
         DAO.begin();
         Refeicao refeicao = daorefeicao.read(id);
-        if (refeicao == null)
-            throw new Exception("Refeição não encontrada: " + id);
+        if (refeicao == null) {
+        	DAO.rollback();
+        	throw new Exception("Refeição não encontrada: " + id);
+        }
+            
         refeicao.setData(data);
         daorefeicao.update(refeicao);
         DAO.commit();
@@ -90,8 +96,11 @@ public class Fachada {
     public static void alterarConsumo(int id, String nome, double preco) throws Exception{
         DAO.begin();
         Consumo consumo = daoconsumo.read(id);
-        if (consumo == null)
-            throw new Exception("Consumo não encontrado: " + id);
+        if (consumo == null) {
+        	DAO.rollback();
+        	throw new Exception("Consumo não encontrado: " + id);
+        }
+
         consumo.setNome(nome);
         consumo.setPreco(preco);
         daoconsumo.update(consumo);
@@ -101,8 +110,11 @@ public class Fachada {
     public static void alterarPesagem(int id, String nome, double preco, double peso) throws Exception{
         DAO.begin();
         Pesagem pesagem = (Pesagem) daopesagem.read(id);
-        if (pesagem == null)
-            throw new Exception("Pesagem não encontrada: " + id);
+        if (pesagem == null) {
+        	DAO.rollback();
+        	throw new Exception("Pesagem não encontrada: " + id);
+        }
+            
         pesagem.setNome(nome);
         pesagem.setPreco(preco);
         pesagem.setPeso(peso);
@@ -113,8 +125,11 @@ public class Fachada {
     public static void alterarBebida(int id, String nome, double preco, double volume) throws Exception{
         DAO.begin();
         Bebida bebida = (Bebida) daobebida.read(id);
-        if (bebida == null)
-            throw new Exception("Bebida não encontrada: " + id);
+        if (bebida == null) {
+        	DAO.rollback();
+        	throw new Exception("Bebida não encontrada: " + id);
+        }
+            
         bebida.setNome(nome);
         bebida.setPreco(preco);
         bebida.setVolume(volume);
@@ -125,17 +140,23 @@ public class Fachada {
     public static void excluirRefeicao(int id) throws Exception{
         DAO.begin();
         Refeicao refeicao = daorefeicao.read(id);
-        if (refeicao == null)
-            throw new Exception("Refeição não encontrada: " + id);
+        if (refeicao == null) {
+        	DAO.rollback();
+        	throw new Exception("Refeição não encontrada: " + id);
+        }
+            
         daorefeicao.delete(refeicao);
         DAO.commit();
     }
     
-    public static void excluirConsumo(int id) throws Exception{
+    public static void excluirConsumo(int id, String nome) throws Exception{
         DAO.begin();
         Consumo consumo = daoconsumo.read(id);
-        if (consumo == null)
-            throw new Exception("Consumo não encontrado: " + id);
+        if (consumo == null) {
+        	DAO.rollback();
+        	throw new Exception("Consumo não encontrado: " + id);
+        }
+            
         daoconsumo.delete(consumo);
         DAO.commit();
     }
@@ -143,8 +164,11 @@ public class Fachada {
     public static void excluirPesagem(int id) throws Exception{
         DAO.begin();
         Pesagem pesagem = (Pesagem) daopesagem.read(id);
-        if (pesagem == null)
-            throw new Exception("Pesagem não encontrada: " + id);
+        if (pesagem == null) {
+        	DAO.rollback();
+        	throw new Exception("Pesagem não encontrada: " + id);
+        }
+            
         daopesagem.delete(pesagem);
         DAO.commit();
     }
@@ -152,47 +176,66 @@ public class Fachada {
     public static void excluirBebida(int id) throws Exception{
         DAO.begin();
         Bebida bebida = (Bebida) daobebida.read(id);
-        if (bebida == null)
-            throw new Exception("Bebida não encontrada: " + id);
+        if (bebida == null) {
+        	DAO.rollback();
+        	throw new Exception("Bebida não encontrada: " + id);
+        }
+            
         daobebida.delete(bebida);
         DAO.commit();
     }
     
+    // usar begin e commit nas leituras para tratar concorrencia (transaction)
+    
     public static List<Refeicao> listarRefeicoes(){
+    	DAO.begin();
         List<Refeicao> resultados = daorefeicao.readAll();
+        DAO.commit();
         return resultados;
     }
     
     public static List<Consumo> listarConsumos(){
+    	DAO.begin();
         List<Consumo> resultados = daoconsumo.readAll();
+        DAO.commit();
         return resultados;
     }
 
     public static List<Pesagem> listarPesagens(){
+    	DAO.begin();
         List<Pesagem> resultados = daopesagem.readAll();
+        DAO.commit();
         return resultados;
     }
 
     public static List<Bebida> listarBebidas(){
+    	DAO.begin();
         List<Bebida> resultados = daobebida.readAll();
+        DAO.commit();
         return resultados;
     }
 
     // Consultas adicionais
     public static List<Refeicao> listarRefeicoesPorData(String data) {
+    	DAO.begin();
         List<Refeicao> todasRefeicoes = daorefeicao.refeicoesPorData(data);
+        DAO.commit();
 
         return todasRefeicoes;
     }
 
     public static List<Refeicao> listarRefeicoesComPesagemMaiorQue(double peso) {
+    	DAO.begin();
         List<Refeicao> todasRefeicoes = daorefeicao.refeicoesAcimaDeNKg((int)peso);
+        DAO.commit();
         
         return todasRefeicoes;
     }
     
     public static List<Refeicao> listarRefeicoesComMaisDeNBebidas(int n) {
+    	DAO.begin();
         List<Refeicao> todasRefeicoes = daorefeicao.refeicoesMaisNBebidas(1);
+        DAO.commit();
 
         return todasRefeicoes;
     }
