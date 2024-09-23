@@ -1,10 +1,21 @@
 package modelo;
 
-public class Bebida extends Consumo {
-    private double volume;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
-    public Bebida(int  id ,String nome, double preco, double volume) {
-        super(id, nome, preco);
+@Entity 
+public class Bebida extends Consumo {
+	@Id		
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private int id;
+	
+    private double volume;
+    
+    public Bebida() {}
+    public Bebida(String nome, double preco, double volume) {
+        super(nome, preco);
         this.volume = volume;
     }
 

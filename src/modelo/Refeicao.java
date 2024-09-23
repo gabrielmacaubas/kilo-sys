@@ -3,14 +3,28 @@ package modelo;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Refeicao {
-    private int id;
-    private String data;
-    private List<Consumo> consumos;
-    private double valorPago;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
-    public Refeicao(int id, String data) {
-        this.id = id;
+
+@Entity
+public class Refeicao {
+	@Id		
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+    private int id;
+	
+	@OneToMany(mappedBy = "refeicao", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Consumo> consumos;
+    
+	private String data;
+	private double valorPago;
+    
+	public Refeicao() {}
+    public Refeicao(String data) {
         this.data = data;
         this.consumos = new ArrayList<>();
         this.valorPago = 0.0;

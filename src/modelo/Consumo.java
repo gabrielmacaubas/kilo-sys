@@ -1,17 +1,29 @@
 package modelo;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+
+
+@Entity 
 public abstract class Consumo {
+	@Id		
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
     private int id;
+	
+	@ManyToOne
+	private Refeicao refeicao;
+	
     private String nome;
     private double preco;
-
-    public Consumo(int id , String nome, double preco) {
-    	this.id = id;
+    
+    public Consumo() {}
+    public Consumo(String nome, double preco) {
         this.nome = nome;
         this.preco = preco;
     }
-
-    public Consumo() {}
 
     public int getId() {
         return id;

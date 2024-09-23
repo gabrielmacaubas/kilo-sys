@@ -1,11 +1,20 @@
 package modelo;
 
-public class Pesagem extends Consumo {
-    private double peso;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
-    public Pesagem(int id , String nome, double preco, double peso) {
-        super(id ,nome, preco);
-        
+@Entity
+public class Pesagem extends Consumo {
+	@Id		
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+    private int id;
+    private double peso;
+    
+    public Pesagem() {}
+    public Pesagem(String nome, double preco, double peso) {
+        super(nome, preco);
         this.peso = peso;
     }
 
