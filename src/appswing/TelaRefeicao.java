@@ -119,9 +119,10 @@ public class TelaRefeicao {
 
     private void cadastrarRefeicao() {
         try {
-            int id = Integer.parseInt(txtId.getText());
-            String data = txtData.getText();
-            Fachada.cadastrarRefeicao(id, data);
+        //   int id = Integer.parseInt(txtId.getText());
+        	   String data = txtData.getText();  // Certifique-se de que essa linha está descomentada
+               Fachada.cadastrarRefeicao(data);
+               listarRefeicoes();
             listarRefeicoes();
         } catch (Exception e) {
             e.printStackTrace();

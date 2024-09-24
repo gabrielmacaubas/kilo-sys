@@ -118,11 +118,11 @@ public class TelaPesagem {
 
     private void cadastrarPesagem() {
         try {
-            int id = Integer.parseInt(txtId.getText());
+          //  int id = Integer.parseInt(txtId.getText());
             String nome = txtNome.getText();
             double preco = Double.parseDouble(txtPreco.getText());
             double peso = Double.parseDouble(txtPeso.getText());
-            Fachada.cadastrarPesagem(id, nome, preco, peso);
+            Fachada.cadastrarPesagem(nome, preco, peso);
             listarPesagens();
         } catch (Exception e) {
             e.printStackTrace();

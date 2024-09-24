@@ -119,11 +119,11 @@ public class TelaBebida {
 
     private void cadastrarBebida() {
         try {
-            int id = Integer.parseInt(txtId.getText());
+          //  int id = Integer.parseInt(txtId.getText());
             String nome = txtNome.getText();
             double preco = Double.parseDouble(txtPreco.getText());
             double volume = Double.parseDouble(txtVolume.getText());
-            Fachada.cadastrarBebida(id, nome, preco, volume);
+            Fachada.cadastrarBebida(nome, preco, volume);
             listarBebidas();
         } catch (Exception e) {
             e.printStackTrace();
