@@ -13,9 +13,17 @@ public class DAORefeicao extends DAO<Refeicao> {
 
     public Refeicao read(Object chave) {
         try {
-            Integer id = (int) chave;
-            TypedQuery<Refeicao> q = manager.createQuery("select r from Refeicao r where r.id = :id", Refeicao.class);
-            q.setParameter("x", id);
+            TypedQuery<Refeicao> q;
+            if (chave instanceof Integer) {
+                Integer id = (Integer) chave;
+                q = manager.createQuery("select r from Refeicao r where r.id = :x", Refeicao.class);
+                q.setParameter("x", id);
+            } else {
+                String nome = (String) chave;
+                System.out.println(nome);
+                q = manager.createQuery("select r from Refeicao r where r.nome = :x", Refeicao.class); // Ajuste conforme o nome real do campo de nome
+                q.setParameter("x", nome);
+            }
             return q.getSingleResult();
         } catch (NoResultException e) {
             return null;
@@ -31,16 +39,17 @@ public class DAORefeicao extends DAO<Refeicao> {
 
     public List<Refeicao> refeicoesAcimaDeNKg(int n) {
         TypedQuery<Refeicao> q = manager.createQuery(
-            "select r from Refeicao r join r.consumos c where c.peso > :n", Refeicao.class);
+            "select r from Refeicao r join r.consumos c where type(c) = Pesagem and c.peso > :n", Refeicao.class);
         q.setParameter("n", n);
         return q.getResultList();
     }
-
+    
     public List<Refeicao> refeicoesMaisNBebidas(int n) {
         TypedQuery<Refeicao> q = manager.createQuery(
-            "select r from Refeicao r join r.consumos c where c instance of Bebida group by r having count(c) > :n",
+            "select r from Refeicao r join r.consumos c where type(c) = Bebida group by r having count(c) > :n", 
             Refeicao.class);
         q.setParameter("n", n);
         return q.getResultList();
     }
+
 }

@@ -10,16 +10,21 @@ import modelo.Bebida;
 public class DAOBebida extends DAO<Bebida> {
 
     public Bebida read(Object chave) {
-    	try {
-    		Integer id = (int) chave;
-			TypedQuery<Bebida> q = manager.createQuery("select b from Bebida b where b.id = :x", Bebida.class);
-			q.setParameter("x", id);
-			Bebida bebida = q.getSingleResult();
-			return bebida;
-    		
-    	}catch(NoResultException e){
-			return null;
-		}
+        try {
+            TypedQuery<Bebida> q;
+            if (chave instanceof Integer) {
+                Integer id = (Integer) chave;
+                q = manager.createQuery("select b from Bebida b where b.id = :x", Bebida.class);
+                q.setParameter("x", id);
+            } else {
+                String nome = (String) chave;
+                q = manager.createQuery("select b from Bebida b where b.nome = :x", Bebida.class);
+                q.setParameter("x", nome);
+            }
+            return q.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
     
 	public List<Bebida> readAll(){

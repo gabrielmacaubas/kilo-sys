@@ -28,8 +28,7 @@ public class Fachada {
 
     public static Refeicao cadastrarRefeicao(String data) throws Exception {
         DAO.begin();
-        Refeicao refeicao = daorefeicao.read(data);
-        refeicao = new Refeicao(data);
+        Refeicao refeicao = new Refeicao(data);
         daorefeicao.create(refeicao);
         DAO.commit();
         return refeicao;

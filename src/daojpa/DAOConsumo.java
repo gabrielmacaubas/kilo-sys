@@ -11,16 +11,21 @@ import modelo.Consumo;
 public class DAOConsumo extends DAO<Consumo> {
 
     public Consumo read(Object chave) {
-    	try {
-    		Integer id = (int) chave;
-			TypedQuery<Consumo> q = manager.createQuery("select c from Consumo c where c.id = :x", Consumo.class);
-			q.setParameter("x", id);
-			Consumo consumo = q.getSingleResult();
-			return consumo;
-    		
-    	}catch(NoResultException e){
-			return null;
-		}
+        try {
+            TypedQuery<Consumo> q;
+            if (chave instanceof Integer) {
+                Integer id = (Integer) chave;
+                q = manager.createQuery("select c from Consumo c where c.id = :x", Consumo.class);
+                q.setParameter("x", id);
+            } else {
+                String nome = (String) chave;
+                q = manager.createQuery("select c from Consumo c where c.nome = :x", Consumo.class); // Ajuste conforme o nome real do campo de nome
+                q.setParameter("x", nome);
+            }
+            return q.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
     
 	public List<Consumo> readAll(){
